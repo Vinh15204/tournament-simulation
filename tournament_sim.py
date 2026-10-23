@@ -77,6 +77,9 @@ def update_elo(elo1, elo2, score1, score2):
 def simulate_series(t1, t2, elos, best_of=3):
     """
     Simulates a Best-of-N series (e.g., Bo3, Bo5).
+    Elo ratings are DYNAMICALLY updated after each match!
+    - The winning team gains Elo points, losing team loses points.
+    - Subsequent matches in the tournament will use these NEW updated Elo ratings!
     Returns: (winner, loser, winner_score, loser_score)
     """
     needed_wins = (best_of + 1) // 2
@@ -89,7 +92,7 @@ def simulate_series(t1, t2, elos, best_of=3):
         else:
             s2 += 1
 
-    # Dynamically update ratings after the match
+    # DYNAMIC ELO UPDATE: Update ratings in-place for both teams
     new_e1, new_e2 = update_elo(elos[t1], elos[t2], s1, s2)
     elos[t1] = new_e1
     elos[t2] = new_e2
